@@ -1,0 +1,2 @@
+import {NavLink,Outlet} from 'react-router-dom';import {useAuth} from '../context/AuthContext';
+export default function AppLayout(){const {user,logout}=useAuth();return <div className="shell"><aside><h1>Mini ATS</h1><p>Recruiting workspace</p>{[['/','Overview'],['/candidates','Candidates'],['/jobs','Jobs'],['/pipeline','Pipeline']].map(([to,n])=><NavLink key={to} to={to} end={to==='/' }>{n}</NavLink>)}</aside><main><header><span>Welcome, {user?.name}</span><button onClick={logout}>Log out</button></header><Outlet/></main></div>}

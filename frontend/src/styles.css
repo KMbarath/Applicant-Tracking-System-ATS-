@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base { body{@apply m-0 bg-slate-50 font-sans text-slate-800} button{@apply rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white} input,textarea,select{@apply my-1 block w-full rounded-md border border-slate-300 p-2} }
+@layer components { .shell{@apply grid min-h-screen grid-cols-[220px_1fr]}.shell aside{@apply bg-indigo-950 p-5 text-indigo-100}.shell aside a{@apply my-1 block rounded p-2 hover:bg-indigo-800}.shell aside a.active{@apply bg-indigo-800}.shell main{@apply w-full max-w-[1500px] px-8 pb-10}.shell header{@apply mb-7 flex h-[70px] items-center justify-between border-b}.metrics{@apply grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7}.metrics article,.panel,.charts>div,.profile,.job,.application,.note{@apply rounded-lg border border-slate-200 bg-white p-4}.metrics span{@apply block text-xs text-slate-500}.metrics strong{@apply text-2xl}.charts{@apply my-6 grid gap-5 lg:grid-cols-2}.page-title{@apply flex items-center justify-between}.panel{@apply my-4 max-w-xl}.cards{@apply grid gap-4 md:grid-cols-2 xl:grid-cols-3}.badge{@apply rounded-full bg-indigo-100 px-2 py-1 text-xs text-indigo-800}table{@apply mt-4 w-full bg-white}th,td{@apply border-b p-3 text-left}td small,.application span,.application small,.note small{@apply mt-1 block text-slate-500}.kanban{@apply grid grid-cols-[repeat(6,minmax(220px,1fr))] gap-3 overflow-x-auto}.kanban section{@apply min-h-[400px] rounded-lg bg-slate-200 p-3}.application{@apply mb-2 text-sm}.login{@apply grid min-h-screen place-items-center bg-indigo-50}.login form{@apply w-[min(400px,92vw)] rounded-xl bg-white p-8 shadow-xl}.error{@apply rounded bg-red-100 p-2 text-red-800}.success{@apply rounded bg-green-100 p-2 text-green-800}.secondary{@apply bg-slate-200 text-slate-700}.danger{@apply bg-red-700}.filters,.pagination{@apply my-3 flex flex-wrap items-end gap-2}.filters input,.filters select,.status-filter{@apply my-0 w-auto min-w-[140px]} }
+@media(max-width:900px){.shell{@apply grid-cols-1}.shell aside{@apply flex gap-2 overflow-auto p-3}.shell aside p{display:none}.shell main{@apply px-4}}
+
+.shell {
+  display: block;
+  min-height: 100vh;
+}
+
+.shell aside {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 30;
+  width: 220px;
+  overflow-y: auto;
+}
+
+.shell main {
+  width: calc(100% - 220px);
+  max-width: none;
+  margin-left: 220px;
+}
+
+.shell header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #f8fafc;
+}
+
+.kanban {
+  min-width: 0;
+}
+
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrap table {
+  min-width: 680px;
+}
+
+@media (max-width: 900px) {
+  .shell aside {
+    inset: 0 0 auto;
+    width: 100%;
+    min-height: 64px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+
+  .shell aside h1 {
+    flex: 0 0 auto;
+  }
+
+  .shell aside a {
+    flex: 0 0 auto;
+  }
+
+  .shell main {
+    width: 100%;
+    margin-left: 0;
+    padding-top: 76px;
+  }
+}
