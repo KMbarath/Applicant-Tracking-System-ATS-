@@ -6,6 +6,10 @@ from app.db.session import get_db
 from app.api.dependencies import current_user
 from app.models import Candidate,Application,Stage,ApplicationStageHistory,User,Job
 router=APIRouter(prefix="/dashboard",tags=["Dashboard"])
+
+def application_period(applied_at,dialect_name):
+ return func.to_char(applied_at,"YYYY-MM") if dialect_name=="postgresql" else func.strftime("%Y-%m",applied_at)
+
 @router.get("/summary")
 def summary(job_id:int|None=None,date_from:datetime|None=None,date_to:datetime|None=None,db:Session=Depends(get_db),_:User=Depends(current_user)):
  q=db.query(Application)
@@ -25,7 +29,8 @@ def distribution(job_id:int|None=None,date_from:datetime|None=None,date_to:datet
  values=dict(q.all());return [{"stage":s.value,"count":values.get(s,0)} for s in Stage]
 @router.get("/application-trends")
 def trends(job_id:int|None=None,date_from:datetime|None=None,date_to:datetime|None=None,db:Session=Depends(get_db),_:User=Depends(current_user)):
- q=db.query(func.strftime('%Y-%m',Application.applied_at).label('period'),func.count(Application.id))
+ period=application_period(Application.applied_at,db.get_bind().dialect.name)
+ q=db.query(period.label('period'),func.count(Application.id))
  if job_id:q=q.filter(Application.job_id==job_id)
  if date_from:q=q.filter(Application.applied_at>=date_from)
  if date_to:q=q.filter(Application.applied_at<=date_to)

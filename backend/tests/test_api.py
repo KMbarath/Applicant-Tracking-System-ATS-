@@ -27,3 +27,6 @@ def test_filters_dashboard_and_terminal_transition():
  assert client.patch(f"/api/v1/applications/{a['id']}/stage",json={'stage':'Hired'},headers=h).status_code==400
  assert client.patch(f"/api/v1/jobs/{j['id']}/close",headers=h).status_code==200
  assert client.get('/api/v1/dashboard/summary',headers=h).status_code==200
+ trends=client.get('/api/v1/dashboard/application-trends',headers=h)
+ assert trends.status_code==200
+ assert trends.json()[0]['applications']>=1
