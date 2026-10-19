@@ -31,6 +31,16 @@ export default function Pipeline() {
     ])
       .then(([applicationResponse, candidateResponse, jobResponse]) => {
         if (!active) return;
+        if (
+          !Array.isArray(applicationResponse.data.items) ||
+          !Array.isArray(candidateResponse.data.items) ||
+          !Array.isArray(jobResponse.data.items) ||
+          !applicationResponse.data.items.every(
+            (application) => application && typeof application === 'object',
+          )
+        ) {
+          throw new Error('The API returned an unexpected pipeline response.');
+        }
         setApplications(applicationResponse.data.items);
         setCandidates(candidateResponse.data.items);
         setJobs(jobResponse.data.items);
@@ -155,14 +165,20 @@ export default function Pipeline() {
               <h3>{stage} <small>{stageApplications.length}</small></h3>
               {stageApplications.map((application) => (
                 <article className="application" key={application.id}>
-                  <b>{application.candidate.full_name}</b>
-                  <span>{application.job.title}</span>
+                  <b>{application.candidate?.full_name || 'Unknown candidate'}</b>
+                  <span>{application.job?.title || 'Unknown job'}</span>
                   <small>
-                    {application.candidate.skills} · {application.candidate.years_experience} years
+                    {application.candidate?.skills || 'Skills not provided'}
+                    {' · '}
+                    {application.candidate?.years_experience ?? 0} years
                   </small>
-                  <small>Applied {new Date(application.applied_at).toLocaleDateString()}</small>
+                  <small>
+                    Applied {application.applied_at
+                      ? new Date(application.applied_at).toLocaleDateString()
+                      : 'date unavailable'}
+                  </small>
                   <select
-                    aria-label={`Move ${application.candidate.full_name}`}
+                    aria-label={`Move ${application.candidate?.full_name || 'candidate'}`}
                     value={application.stage}
                     onChange={(event) => move(application, event.target.value)}
                   >
